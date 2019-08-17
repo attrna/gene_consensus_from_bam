@@ -27,10 +27,11 @@ for file in $(ls *gene.bam);do
   $bedtools merge -i ${file/.bam/.DP3.mask.bed} | $bedtools subtract -a - -b ${file/.bam/.indel.s.bed}  > ${file/.bam/.DP3.mask.noindel.bed}
 
 
-#call consensus + IUPAC codes (works only with bcftools version 1.7)
-name=${file/.gene.bam/}
-$samtools faidx $ref $region | $BCFtools consensus -I -s $name -m ${file/.bam/.DP3.mask.noindel.bed} ${file/.bam/filt.soft}.vcf.gz > ${file/.bam/.0.fasta}
+  #call consensus + IUPAC codes (works only with bcftools version 1.7)
+  name=${file/.gene.bam/}
+  $samtools faidx $ref $region | $bcftools consensus -I -s $name -m ${file/.bam/.DP3.mask.noindel.bed} ${file/.bam/filt.soft}.vcf.gz > ${file/.bam/.0.fasta}
 
-#edit names
-sed -i "s/I/$name-gene-I/" ${file/.bam/.0.fasta}
+  #edit names
+  sed -i "s/>/>$name-gene-/" ${file/.bam/.0.fasta}
 
+done
